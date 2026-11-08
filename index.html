@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sistema decimal: manzanas, cajas, camiones y barcos</title>
+<title>Sistema decimal: monedas y billetes</title>
 <style>
 :root{--bg:#f6f8f9;--card:#fff;--ink:#1d2b33;--mute:#5b6b75;--line:#cfd8de;--acc:#a16207;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12191d;--card:#1a2328;--ink:#e6edf1;--mute:#9fb0ba;--line:#34444d;--acc:#e3b341}}
@@ -13,163 +13,138 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 "Trebuchet MS",Verdana,system-ui,sans-serif;overflow-x:hidden}
 main{max-width:1500px;margin:0 auto;padding:20px 16px 60px}
 h1{font:700 clamp(1.5rem,5vw,2rem)/1.2 Georgia,"Times New Roman",serif;margin:.2em 0 .3em}
-h3{font:700 1.05rem/1.2 inherit;margin:0 0 8px;color:var(--mute);text-align:center}
+h3{font-size:1.05rem;line-height:1.2;margin:0 0 8px;color:var(--mute);text-align:center}
 .kick{color:var(--mute);margin:0}
-.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:14px}
+.tot{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin:10px 0 0;padding:4px 0 6px;border-bottom:1px solid var(--line);text-align:center}
+.tot b{font:700 clamp(1.6rem,5vw,2.4rem) Georgia,serif;color:var(--acc)}
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:12px}
 .zone{background:var(--card);border:2px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column}
 .cnt{align-self:center;min-width:2.2em;text-align:center;font:700 clamp(3rem,10vw,4.5rem)/1.1 Georgia,serif;color:var(--acc);border:3px solid var(--line);border-radius:12px;padding:0 .25em;margin:0 0 12px;background:var(--bg)}
 .gu{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
 .gd{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.slot{aspect-ratio:1;min-height:52px;padding:6px;border:2px dashed var(--mute);border-radius:50%;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.gd.big{grid-template-columns:repeat(2,1fr)}
+.slot{aspect-ratio:1;min-height:52px;padding:4px;border:2px dashed var(--mute);border-radius:50%;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .slot.on{border-style:solid;border-color:var(--acc)}
 .slot:disabled{cursor:default}
 .ap{display:block;width:100%;height:100%}
 .slot.go .ap{animation:sink 1.2s forwards}
 @keyframes sink{0%,45%{transform:none;opacity:1}100%{transform:scale(.25);opacity:0}}
-.cell{aspect-ratio:1/.95;border:2px dashed var(--line);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:transparent;color:var(--ink);font:inherit;padding:4px;min-width:0}
-.cell.box{border:2px solid var(--line);cursor:pointer}
+.cell{aspect-ratio:1/.95;border:2px dashed var(--line);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:transparent;color:var(--ink);font:inherit;padding:4px;min-width:0;cursor:pointer}
+.cell:disabled{cursor:default}
+.cell.box{border:2px solid var(--line)}
 .cell.box svg{width:100%;height:100%}
 .cell.box.pop{animation:bpop .6s}
 @keyframes bpop{0%{transform:scale(.8)}60%{transform:scale(1.08)}100%{transform:none}}
-.cell.grp{border:2px solid var(--acc);cursor:pointer;box-shadow:0 0 0 0 var(--acc);animation:pulse 2s infinite}
-.cell.grp:disabled{cursor:default;animation:none}
+.cell.grp{border:2px solid var(--acc);animation:pulse 2s infinite}
+.cell.grp:disabled{animation:none}
 .cell.grp.arr{animation:arrive .5s .8s both}
 @keyframes arrive{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 35%,transparent)}}
+.cell.shrk{animation:sink 1.2s forwards}
 .mini{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;width:88%}
 .mini .ap{height:auto;aspect-ratio:1}
 .cell small{font-size:.68rem;line-height:1.15;margin-top:3px;color:var(--mute);text-align:center}
-.zb{margin-top:10px;text-align:center}
+.cell.G{grid-column:span 2;aspect-ratio:auto;padding:6px;border:2px solid var(--acc)}
+.m100{display:grid;grid-template-columns:repeat(10,1fr);width:92%}
+.m100 .ap{width:100%;height:auto;aspect-ratio:1}
+.zb{margin-top:10px;display:flex;justify-content:center}
+.w{position:relative;min-width:0}.w.G{grid-column:span 2}.w .cell{width:100%}
+.x{position:absolute;top:-8px;right:-6px;z-index:2;width:28px;height:28px;padding:0;border-radius:50%;border:2px solid var(--line);background:var(--card);color:var(--ink);font:700 16px/1 inherit;cursor:pointer}
+.x:disabled{opacity:.4;cursor:default}
 button.sec{font:inherit;font-weight:700;padding:10px 16px;min-height:44px;border-radius:8px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
 button.sec:disabled{opacity:.4;cursor:default}
 button:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
-.hint{font-size:.85rem;color:var(--mute);text-align:center;margin:10px 0 0}
 .msg{text-align:center;min-height:3.2em;margin:14px 0 8px;font-size:1.05rem}
-.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
-.sbox{background:var(--card);border:2px solid var(--line);border-radius:10px;padding:8px;text-align:center;min-width:0}
-.sbox h4{margin:0;font-size:.9rem;color:var(--mute)}
-.snum{font:700 clamp(2.4rem,9vw,3.6rem)/1.1 Georgia,serif;color:var(--acc)}
-.sdraw{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:flex-start;min-height:56px;margin-top:6px}
-.sdraw>svg{width:56px;height:54px}
-.sdraw>svg.ap{width:26px;height:26px}
-.sdraw .mini{width:56px}
-.ini{position:fixed;inset:0;z-index:9;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:16px}
-.ini.hide{display:none}
-.ini .card{background:var(--card);border:2px solid var(--line);border-radius:10px;padding:20px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px}
-.ini input{font:inherit;padding:12px;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
-.reto{margin-top:6px;text-align:center}
-.rtit{font:700 clamp(1.3rem,5vw,1.7rem)/1.3 Georgia,serif}
-.rb{display:flex;gap:8px;justify-content:center;margin-top:8px}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-delay:0s!important}}
-.cell.shrk{animation:sink 1.2s forwards}
-button.cell:not(.box):not(.grp){cursor:pointer}
-button.cell:disabled{cursor:default}
-.cell.hid{opacity:0}
-.cell.arr2{animation:arrive .5s .9s both}
-.zb{display:flex;justify-content:center}
-.m100{display:grid;grid-template-columns:repeat(10,1fr);width:92%}
-.m100 .ap{width:100%;height:auto;aspect-ratio:1}
-.cell.G{grid-column:span 2;aspect-ratio:auto;padding:6px;border:2px solid var(--acc);cursor:pointer}
-.gd.big{grid-template-columns:repeat(2,1fr)}
-.lock .zb{display:none}
-.simp{margin-top:18px;text-align:left}.simp table{border-collapse:collapse;width:100%;font-size:.85rem}.simp th,.simp td{border:1px solid var(--line);padding:4px 6px}.simp .tw{overflow-x:auto}.simp tr.f td{background:color-mix(in srgb,#e06666 22%,transparent)}.own{margin-top:8px;font-size:.95rem}
-.enun{font:600 clamp(1.1rem,3.6vw,1.5rem)/2.3 Georgia,serif;margin:6px 0;text-align:center}
-.ans{width:3.8em;font:inherit;text-align:center;padding:2px;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-<symbol id="apple" viewBox="0 0 40 40"><path d="M20 12C14 7 5 11 6 21c1 9 7 16 14 14 7 2 13-5 14-14 1-10-8-14-14-9z" fill="#d6342a"/><path d="M12 15c2-3 5-4 8-3" stroke="#fff" stroke-opacity=".45" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M20 12c0-4 1-7 4-9" stroke="#6b4423" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M22 8c3-4 8-4 10-3-1 4-6 6-10 3z" fill="#4c9a2a"/></symbol>
-<symbol id="caj" viewBox="0 0 30 26"><rect x="1" y="1" width="28" height="24" rx="2" fill="#c8924f" stroke="#7a4e1d" stroke-width="2"/><rect x="12" y="1" width="6" height="24" fill="#e6c08a" stroke="#7a4e1d" stroke-width="1"/></symbol>
+<symbol id="coin" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#f2c230" stroke="#b7791f" stroke-width="2.5"/><circle cx="20" cy="20" r="12.5" fill="none" stroke="#b7791f" stroke-opacity=".6" stroke-width="1.5"/><text x="20" y="26" text-anchor="middle" font-size="17" font-weight="700" fill="#8a5a0b" font-family="Georgia,serif">1</text></symbol>
 </defs></svg>
-
 <main>
 <p class="kick">Tema 1 · Material de apoyo</p>
-<h1>El sistema de numeración decimal</h1>
-<p>Toca los huecos para poner manzanas, cajas, camiones y barcos. Cuando haya diez, se agrupan: toca el grupo para guardarlo. Toca una pieza para ver lo que lleva dentro.</p>
-
-<div class="sum" id="sum" aria-label="Resumen"></div>
+<h1>El sistema de numeración decimal con dinero</h1>
+<p>Toca los huecos para poner monedas y billetes. Cuando hay diez, se cambian por una pieza mayor: toca el grupo para cambiarlo. Toca un billete para ver lo que vale en piezas más pequeñas. Toca la × de una pieza para quitarla.</p>
+<p class="tot" aria-live="polite">Tenemos: <b id="tot">0 €</b></p>
 <div class="board" id="board"></div>
 <p class="msg" id="msg" aria-live="polite"></p>
 <p><button class="sec" id="reset">Empezar de nuevo</button></p>
-
 </main>
 <script>
-var AP='<svg class="ap" viewBox="0 0 40 40" aria-hidden="true"><use href="#apple"/></svg>';
-var BOX='<svg viewBox="0 0 120 96" aria-hidden="true"><path d="M22 36 6 22l10-14 24 22z" fill="#b8803f" stroke="#7a4e1d" stroke-width="2" stroke-linejoin="round"/><path d="M98 36 114 22 104 8 80 30z" fill="#b8803f" stroke="#7a4e1d" stroke-width="2" stroke-linejoin="round"/><path d="M14 44 22 32h76l8 12z" fill="#7a4e1d"/><use href="#apple" x="26" y="24" width="26" height="26"/><use href="#apple" x="68" y="24" width="26" height="26"/><use href="#apple" x="47" y="20" width="26" height="26"/><rect x="14" y="42" width="92" height="50" rx="4" fill="#c8924f" stroke="#7a4e1d" stroke-width="2.5"/><path d="M14 52h92" stroke="#7a4e1d" stroke-width="2"/></svg>';
-var BOXM=BOX.replace('<svg ','<svg class="ap" ');
-function BX(x,y){return BOX.replace('<svg viewBox="0 0 120 96" aria-hidden="true">','<svg x="'+x+'" y="'+y+'" width="36" height="29" viewBox="0 0 120 96">')}
-var TRUCK='<svg viewBox="0 0 140 96" aria-hidden="true"><rect x="6" y="32" width="90" height="10" fill="#34495e"/>'+BX(10,17)+BX(54,17)+BX(32,8)+'<rect x="6" y="40" width="90" height="38" rx="3" fill="#5b7c99" stroke="#34495e" stroke-width="2.5"/><path d="M98 48h20l16 16v14H98z" fill="#3b82c4" stroke="#34495e" stroke-width="2.5" stroke-linejoin="round"/><path d="M104 53h12l10 11h-22z" fill="#cfe8fb"/><circle cx="28" cy="80" r="9" fill="#333"/><circle cx="72" cy="80" r="9" fill="#333"/><circle cx="116" cy="80" r="9" fill="#333"/><circle cx="28" cy="80" r="3.5" fill="#bbb"/><circle cx="72" cy="80" r="3.5" fill="#bbb"/><circle cx="116" cy="80" r="3.5" fill="#bbb"/></svg>';
-var TRUCKM=TRUCK.replace('<svg ','<svg class="ap" ');
-var SHIP='<svg viewBox="0 0 150 96" aria-hidden="true"><rect x="40" y="22" width="26" height="22" fill="#e6e1d6" stroke="#34495e" stroke-width="2"/><rect x="70" y="10" width="14" height="34" fill="#e06666" stroke="#34495e" stroke-width="2"/><rect x="22" y="36" width="30" height="16" fill="#3b82c4" stroke="#34495e" stroke-width="2"/><rect x="56" y="36" width="30" height="16" fill="#c8924f" stroke="#34495e" stroke-width="2"/><rect x="90" y="36" width="30" height="16" fill="#5b9a4a" stroke="#34495e" stroke-width="2"/><path d="M8 52h134l-18 28H28z" fill="#2c4a6b" stroke="#1f3347" stroke-width="2.5" stroke-linejoin="round"/><path d="M0 88q9-8 18 0t18 0 18 0 18 0 18 0 18 0 18 0 18 0" fill="none" stroke="#6fb1e0" stroke-width="3" stroke-linecap="round"/></svg>';
-var PIECE=[AP,BOX,TRUCK,SHIP],MINI=['',AP,BOXM,TRUCKM];
+function cls(s){return s.replace('<svg ','<svg class="ap" ')}
+function BILL(c,t){return '<svg viewBox="0 26 120 68" aria-hidden="true"><rect x="6" y="30" width="108" height="60" rx="5" fill="'+c+'" stroke="#1f2d3a" stroke-width="2.5"/><rect x="13" y="37" width="94" height="46" rx="3" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2"/><circle cx="25" cy="60" r="8" fill="#fff" fill-opacity=".35"/><circle cx="95" cy="60" r="8" fill="#fff" fill-opacity=".35"/><text x="60" y="68" text-anchor="middle" font-size="'+(t.length>2?21:26)+'" font-weight="700" fill="#fff" font-family="Georgia,serif">'+t+' €</text></svg>'}
+var CO='<svg class="ap" viewBox="0 0 40 40" aria-hidden="true"><use href="#coin"/></svg>';
+var B10=BILL('#e07a5f','10'),B100=BILL('#4c9a2a','100'),B1000=BILL('#6a4fb3','1000');
+var PIECE=[CO,B10,B100,B1000],MINI=['',CO,cls(B10),cls(B100)];
 var NAME=['unidades','decenas','centenas','millares'],SING=['unidad','decena','centena','millar'],ORD=['las unidades','las decenas','las centenas','los millares'];
-var ZT=['Unidades (manzanas)','Decenas (cajas)','Centenas (camiones)','Millares (barcos)'],QT=['Quitar una manzana','Quitar una caja','Quitar un camión','Quitar un barco'];
-var PL=['manzanas','cajas','camiones'],UNO=['una manzana','una caja','un camión','un barco'];
-var CAP='Con 9 barcos, 9 camiones, 9 cajas y 9 manzanas llegamos a 9999. Más adelante veremos el puerto.';
+var ZT=['Unidades (monedas de 1 €)','Decenas (billetes de 10 €)','Centenas (billetes de 100 €)','Millares (billetes de 1000 €)'];
+var PL=['monedas de 1 €','billetes de 10 €','billetes de 100 €'],UNO=['una moneda de 1 €','un billete de 10 €','un billete de 100 €','un billete de 1000 €'];
+var QT=['Quitar una moneda','Quitar un billete de 10','Quitar un billete de 100','Quitar un billete de 1000'];
+var CAP='Con 9 billetes de 1000 €, 9 de 100 €, 9 de 10 € y 9 monedas llegamos a 9999 €. Más adelante veremos números mayores.';
 var $=function(i){return document.getElementById(i)};
-var u,a,busy,sh,arr,opened,lock=false;
+var u,a,busy,sh,arr,opened;
 function w(k,s,p){return k+' '+(k==1?s:p)}
 function F(){return false}
 function nu(){return u.filter(Boolean).length}
-function nueve(n){var r=[];for(var i=0;i<n;i++)r.push('b');return r}
-function init(){u=[];for(var i=0;i<10;i++)u.push(false);a=[0,[],[],[]];busy=false;sh=[0,0,0,0];arr=[-1,-1,-1,-1];opened=''}
-function cnt(k){return k==0?(nu()==10?0:nu()):(sh[k]||a[k].length==10?0:a[k].length)}
-function can(k){return k<3&&(a[k+1].length<9||can(k+1))}
-(function(){var h='',s='';for(var k=3;k>=0;k--){
+function nueve(n){var r=[];for(var i=0;i<n;i++)r.push('b');r.push('');return r}
+function blank(n){return Array(n).fill('')}
+function len(k){return a[k].filter(Boolean).length}
+function init(){u=[];for(var i=0;i<10;i++)u.push(false);a=[0,blank(10),blank(10),blank(9)];busy=false;sh=[0,0,0,0];arr=[-1,-1,-1,-1];opened=''}
+function cnt(k){return k==0?(nu()==10?0:nu()):(sh[k]||len(k)==10?0:len(k))}
+function can(k){return k<3&&(len(k+1)<9||can(k+1))}
+(function(){var h='';for(var k=3;k>=0;k--)
  h+='<section class="zone" aria-label="'+NAME[k]+'"><h3>'+ZT[k]+'</h3><div class="cnt" id="c'+k+'" aria-live="polite">0</div><div class="'+(k?'gd'+(k>1?' big':''):'gu')+'" id="g'+k+'"></div><div class="zb"><button class="sec" id="q'+k+'">'+QT[k]+'</button></div></section>';
- s+='<div class="sbox"><h4>'+NAME[k][0].toUpperCase()+NAME[k].slice(1)+'</h4><div class="snum" id="s'+k+'">0</div><div class="sdraw" id="w'+k+'"></div></div>'}
- $('board').innerHTML=h;$('sum').innerHTML=s})();
-function tray(k){var A=a[k],h='',n=Math.max(k<3?10:9,A.length),i,x,cl;
+ $('board').innerHTML=h})();
+function X(k,i,d){return '<button class="x" data-k="'+k+'" data-i="'+i+'" aria-label="Quitar '+UNO[k]+'"'+d+'>×</button>'}
+function tray(k){var A=a[k],h='',n=A.length,i,x,cl,d=busy?' disabled':'';
  for(i=0;i<n;i++){x=A[i];
   if(x=='b'){cl='cell box'+(opened==k+'.'+i?' pop':'')+(sh[k]?' shrk':'');
-   h+='<button class="'+cl+'" data-k="'+k+'" data-i="'+i+'" aria-label="'+UNO[k]+'. Tócalo para ver lo que lleva dentro"'+(busy?' disabled':'')+'>'+PIECE[k]+'</button>'}
+   h+='<div class="w"><button class="'+cl+'" data-k="'+k+'" data-i="'+i+'" aria-label="'+UNO[k]+'. Tócalo para ver lo que vale en piezas pequeñas"'+d+'>'+PIECE[k]+'</button>'+X(k,i,d)+'</div>'}
   else if(x=='g'){cl='cell grp'+(arr[k]==i?' arr':'')+(sh[k]?' shrk':'');
-   h+='<button class="'+cl+'" data-k="'+k+'" data-i="'+i+'" aria-label="Diez '+PL[k-1]+' juntas. Tócalas para guardarlas"'+(busy?' disabled':'')+'><span class="mini">'+MINI[k].repeat(10)+'</span><small>'+(k==2?'Toca una caja: se rompe<br>Toca aquí: camión':k==3?'Toca un camión: se rompe<br>Toca aquí: barco':'Toca para guardarlas')+'</small></button>'}
-  else if(x=='G')h+='<button class="cell grp G" data-k="'+k+'" data-i="'+i+'" aria-label="Cien piezas. Tócalas para volver"'+(busy?' disabled':'')+'><span class="m100">'+(k==2?AP:BOXM).repeat(100)+'</span><small>'+(k==2?'Un camión son 100 manzanas':'Un barco son 100 cajas')+'. Toca para volver</small></button>';
-  else h+='<button class="cell" data-k="'+k+'" data-i="'+i+'" aria-label="Hueco para '+UNO[k]+'"'+(busy||lock?' disabled':'')+'></button>'}
+   h+='<div class="w"><button class="'+cl+'" data-k="'+k+'" data-i="'+i+'" aria-label="Diez '+PL[k-1]+'. Tócalas para cambiarlas por '+UNO[k]+'"'+d+'><span class="mini">'+MINI[k].repeat(10)+'</span><small>'+(k==1?'Toca para cambiarlas':'Toca un billete: se abre<br>Toca aquí: cambiar')+'</small></button>'+X(k,i,d)+'</div>'}
+  else if(x=='G')h+='<div class="w G"><button class="cell grp G" data-k="'+k+'" data-i="'+i+'" aria-label="Cien piezas. Tócalas para volver"'+d+'><span class="m100">'+(k==2?CO:cls(B10)).repeat(100)+'</span><small>'+(k==2?'Un billete de 100 € vale 100 monedas':'Un billete de 1000 € vale 100 billetes de 10 €')+'. Toca para volver</small></button>'+X(k,i,d)+'</div>';
+  else h+='<button class="cell" data-k="'+k+'" data-i="'+i+'" aria-label="Hueco para '+UNO[k]+'"'+d+'></button>'}
  return h}
-function draw(k){if(sh[k]||a[k].length==10)return '';var h='';a[k].forEach(function(x){h+=x=='b'?PIECE[k]:'<span class="mini">'+MINI[k].repeat(10)+'</span>'});return h}
-function avail(k){if(k==0&&nu())return true;if(k&&a[k].length)return true;for(var j=k+1;j<4;j++)if(a[j].length)return true;return false}
+function avail(k){if(k==0&&nu())return true;if(k&&len(k))return true;for(var j=k+1;j<4;j++)if(len(j))return true;return false}
 function dm(){var p=[],k,m='';for(k=3;k>=0;k--)if(cnt(k))p.push(w(cnt(k),SING[k],NAME[k]));
- for(k=1;k<4;k++)if(a[k].indexOf('g')>-1){m=' Toca el grupo de diez '+PL[k-1]+' para guardarlo en '+UNO[k]+'.';break}
- return p.length?'Tenemos '+p.join(', ').replace(/, ([^,]*)$/,' y $1')+'.'+m:'Toca un hueco para poner una manzana.'}
+ for(k=1;k<4;k++)if(a[k].indexOf('g')>-1){m=' Toca el grupo de diez '+PL[k-1]+' para cambiarlo por '+UNO[k]+'.';break}
+ return p.length?'Tenemos '+p.join(', ').replace(/, ([^,]*)$/,' y $1')+'.'+m:'Toca un hueco para poner una moneda.'}
 function render(msg){var k,i,h='';
- for(i=0;i<10;i++)h+='<button class="slot'+(u[i]?' on':'')+(nu()==10&&u[i]?' go':'')+'" data-i="'+i+'" aria-label="Manzana '+(i+1)+(u[i]?', puesta':', vacía')+'"'+(busy||lock?' disabled':'')+'>'+(u[i]?AP:'')+'</button>';
+ for(i=0;i<10;i++)h+='<button class="slot'+(u[i]?' on':'')+(nu()==10&&u[i]?' go':'')+'" data-i="'+i+'" aria-label="Moneda '+(i+1)+(u[i]?', puesta':', vacía')+'"'+(busy?' disabled':'')+'>'+(u[i]?CO:'')+'</button>';
  $('g0').innerHTML=h;
- for(k=0;k<4;k++){$('c'+k).textContent=cnt(k);$('s'+k).textContent=cnt(k);
-  if(k){$('g'+k).innerHTML=tray(k);$('w'+k).innerHTML=draw(k)}else{h='';for(i=0;i<(nu()==10?0:nu());i++)h+=AP;$('w0').innerHTML=h}
-  $('q'+k).disabled=busy||lock||!avail(k)}
+ for(k=0;k<4;k++){$('c'+k).textContent=cnt(k);if(k)$('g'+k).innerHTML=tray(k);$('q'+k).disabled=busy||!avail(k)}
+ $('tot').textContent=(cnt(3)*1000+cnt(2)*100+cnt(1)*10+cnt(0))+' €';
  $('msg').textContent=msg||dm()}
-function carry(k){busy=true;sh[k]=1;if(k)a[k]=a[k].map(function(){return 'b'});
- var B=a[k+1];B.push('g');arr[k+1]=B.length-1;
- render('¡Diez '+PL[k]+'! Las agrupamos: se queda 0 en '+ORD[k]+' y pasa 1 a '+ORD[k+1]+'.');
- setTimeout(function(){if(k)a[k]=[];else u=u.map(F);sh[k]=0;arr[k+1]=-1;
-  if(B.length==10)carry(k+1);else{busy=false;render()}},1500)}
-$('g0').onclick=function(e){var s=e.target.closest('.slot');if(!s||busy||lock)return;var i=+s.dataset.i;
+function carry(k){busy=true;sh[k]=1;if(k)a[k]=a[k].map(function(x){return x?'b':''});
+ var A=a[k+1],id=A.indexOf('');A[id]='g';arr[k+1]=id;
+ render('¡Diez '+PL[k]+'! Las cambiamos por '+UNO[k+1]+': queda 0 en '+ORD[k]+' y pasa 1 a '+ORD[k+1]+'.');
+ setTimeout(function(){if(k)a[k]=blank(10);else u=u.map(F);sh[k]=0;arr[k+1]=-1;
+  if(len(k+1)==10)carry(k+1);else{busy=false;render()}},1500)}
+$('g0').onclick=function(e){var s=e.target.closest('.slot');if(!s||busy)return;var i=+s.dataset.i;
  if(u[i]){u[i]=false;render();return}
  if(nu()==9){if(!can(0)){render(CAP);return}u[i]=true;carry(0);return}
  u[i]=true;render()};
-function tap(e){var x=e.target.closest('.cell');if(!x||busy||!x.dataset.k)return;var k=+x.dataset.k,i=+x.dataset.i,A=a[k],m;
- if(i>=A.length){if(lock)return;
-  if(A.length==9){if(!can(k)){render(CAP);return}A.push('b');carry(k);return}
-  A.push('b');opened=k+'.'+(A.length-1);render('Ponemos '+UNO[k]+': 1 '+SING[k]+' son 10 '+NAME[k-1]+'.');opened='';return}
- if(A[i]=='b'){A[i]='g';render('Sacamos lo de dentro: siguen siendo 1 '+SING[k]+'.');return}
+function tap(e){var xb=e.target.closest('.x');if(xb){if(busy)return;var kx=+xb.dataset.k;a[kx][+xb.dataset.i]='';render('Quitamos '+UNO[kx]+'.');return}
+ var x=e.target.closest('.cell');if(!x||busy||!x.dataset.k)return;var k=+x.dataset.k,i=+x.dataset.i,A=a[k];
+ if(!A[i]){
+  if(len(k)==9&&k<3){if(!can(k)){render(CAP);return}A[i]='b';carry(k);return}
+  A[i]='b';opened=k+'.'+i;render('Ponemos '+UNO[k]+': vale lo mismo que 10 '+PL[k-1]+'.');opened='';return}
+ if(A[i]=='b'){A[i]='g';render('Lo cambiamos por 10 '+PL[k-1]+': sigue valiendo lo mismo.');return}
  if(A[i]=='G'){A[i]='g';render();return}
- if((k==2||k==3)&&e.target.closest('.mini svg')){A[i]='G';render(k==2?'Cada caja tiene 10 manzanas: un camión tiene 100.':'Cada camión tiene 10 cajas: un barco tiene 100 cajas.');return}
- A[i]='b';opened=k+'.'+i;render('Ya es '+UNO[k]+': 1 '+SING[k]+' son 10 '+NAME[k-1]+'.');opened=''}
+ if((k==2||k==3)&&e.target.closest('.mini svg')){A[i]='G';render(k==2?'Cada billete de 10 € vale 10 monedas: un billete de 100 € vale 100 monedas.':'Cada billete de 100 € vale 10 de 10 €: un billete de 1000 € vale 100 billetes de 10 €.');return}
+ A[i]='b';opened=k+'.'+i;render('Cambiamos 10 '+PL[k-1]+' por '+UNO[k]+'.');opened=''}
 for(var kk=1;kk<4;kk++)$('g'+kk).onclick=tap;
-function quitar(k){if(busy||lock)return;var i,j,t;
+function quitar(k){if(busy)return;var i,j,t,A;
  if(k==0&&nu()){for(i=9;i>=0;i--)if(u[i]){u[i]=false;break}render();return}
- if(k&&a[k].length){a[k].pop();render('Quitamos '+UNO[k]+'.');return}
- for(j=k+1;j<4;j++)if(a[j].length)break;
+ if(k&&len(k)){A=a[k];for(i=A.length-1;i>=0;i--)if(A[i]){A[i]='';break}render('Quitamos '+UNO[k]+'.');return}
+ for(j=k+1;j<4;j++)if(len(j))break;
  if(j>3)return;
- a[j].pop();for(i=j-1;i>=k;i--){if(i)a[i]=nueve(9);else for(t=0;t<9;t++)u[t]=true}
- render('Abrimos '+UNO[j]+' hasta llegar a '+NAME[k]+': quitamos una y quedan 9.')}
+ A=a[j];for(i=A.length-1;i>=0;i--)if(A[i]){A[i]='';break}
+ for(i=j-1;i>=k;i--){if(i)a[i]=nueve(9);else for(t=0;t<9;t++)u[t]=true}
+ render('Cambiamos '+UNO[j]+' por piezas más pequeñas hasta llegar a '+NAME[k]+': quitamos 1 y quedan 9.')}
 [0,1,2,3].forEach(function(k){$('q'+k).onclick=function(){quitar(k)}});
-
-
-$('reset').onclick=function(){if(lock)return;init();render('Empezamos de nuevo. Toca un hueco para poner una manzana.')};
+$('reset').onclick=function(){init();render('Empezamos de nuevo. Toca un hueco para poner una moneda.')};
 init();render();
 </script>
 </body>
